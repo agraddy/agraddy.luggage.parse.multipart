@@ -6,17 +6,19 @@
   "author": "Anthony Graddy",
   "license": "MIT",
   "homepage": "https://github.com/agraddy/agraddy.luggage.parse.multipart#readme",
+  "luggage": true,
   "scripts": {
     "test": "node ./test"
   },
   "repository": {
-	  "type": "git",
-	  "url": "git://github.com/agraddy/agraddy.luggage.parse.multipart.git"
+    "type": "git",
+    "url": "git://github.com/agraddy/agraddy.luggage.parse.multipart.git"
   },
   "bugs": {
-	  "url": "https://github.com/agraddy/agraddy.luggage.parse.multipart/issues"
+    "url": "https://github.com/agraddy/agraddy.luggage.parse.multipart/issues"
   },
   "devDependencies": {
-	  "agraddy.test.tap": "^0.2.0"
+    "agraddy.test.res": "^0.4.0",
+    "agraddy.test.tap": "^0.2.0"
   }
 }
