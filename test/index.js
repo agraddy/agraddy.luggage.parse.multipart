@@ -7,6 +7,8 @@ var util = require('util');
 
 var mod = require('../');
 
+var saved = '';
+
 var req = new stream.Readable();
 req.headers = {};
 req.headers['content-type'] = 'multipart/form-data; boundary=---------------------------10566316601954411116451223245';
@@ -44,6 +46,8 @@ req._read = function(size) {
 	output += '--';
 	output += '\r\n';
 
+	saved = output;
+
 	this.push(output);
 	this.push(null);
 };
@@ -51,6 +55,10 @@ var res = response();
 var lug = {};
 mod.luggage(req, res, lug, function() {
 	tap.assert.deepEqual(lug.post, {"one": "1", "two": "2", "three": "3"}, 'Should set post.');
+
+	// Have some concerns about adding this - size and streaming issues.
+	// Reconsider this in the future (maybe set as an option).
+	tap.assert.equal(lug.post_original, saved, 'Should match the original data sent.');
 });
 
 tap.assert.equal(pack.luggage, true, 'The luggage item needs to be set in the package.json file.');
