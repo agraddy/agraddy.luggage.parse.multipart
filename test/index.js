@@ -1,3 +1,4 @@
+process.chdir('test');
 var tap = require('agraddy.test.tap')(__filename);
 var response = require('agraddy.test.res');
 var pack = require('../package.json');
@@ -54,6 +55,7 @@ req._read = function(size) {
 var res = response();
 var lug = {};
 mod.luggage(req, res, lug, function() {
+	console.log(util.inspect(lug.post, false, null));
 	tap.assert.deepEqual(lug.post, {"one": "1", "two": "2", "three": "3"}, 'Should set post.');
 
 	// Have some concerns about adding this - size and streaming issues.
@@ -332,5 +334,20 @@ var lug3 = {};
 mod.luggage(req3, res3, lug3, function() {
 	//console.log(util.inspect(lug3.post, false, null));
 	tap.assert.deepEqual(lug3.post, {"arr": [{"with": {"extra": {"depth": "one", "width": "one.five"}}}, {"with": {"extra": {"depth": "two", "width": "two.five"}}}], "deep": {"down": {"another": "second", "obj": "test"}}, "filter_json": [{"from": "TX", "to": "AL"}, {"from": "", "to": ""}, {"from": "", "to": ""}, {"from": "", "to": ""}, {"from": "", "to": ""}], "id": "1"}, 'Should handle arrays with nested values.');
+	next();
 });
+
+
+
+function next() {
+	var req = require('./fixtures/double_multipart.req');
+	var res = response();
+	var lug = {};
+	var expect = require('./fixtures/double_multipart.js');
+	mod.luggage(req, res, lug, function() {
+		//console.log(util.inspect(lug.post, false, null));
+		tap.assert.deepEqual(lug.post, expect, 'Should handle multipart inside of multipart.');
+		next();
+	});
+}
 
